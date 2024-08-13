@@ -15,7 +15,11 @@ const port = process.env.PORT || 3000;
 if (!dbURI) {
   console.error('Missing MONGODB_URI in environment variables');
   process.exit(1);
-}
+} 
+
+app.get("/",(req,res) => {
+  res.json("hello")
+           });
 
 // Connect to MongoDB
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -23,7 +27,11 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch(err => console.error('Failed to connect to MongoDB', err));
 
 // Middleware
-app.use(cors());
+app.use(cors( {
+    origin: ["https://krbusdevlox-2hrn7dub0-devloxportfolios-projects.vercel.app"],
+     methods: ["POST","GET"],
+     credentials: true
+  }));
 app.use(express.json());
 
 // Routes
@@ -37,7 +45,7 @@ app.use('/api', require('./routes/allocationRoutes'));
 // Serve static files from the React app (comment out this line for now)
 // app.use(express.static(path.join(__dirname, '../client/build')));
 
-// Catch-all handler to serve the React app (comment out this line for now)
+// // Catch-all handler to serve the React app (comment out this line for now)
 // app.get('*', (req, res) => {
 //   res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 // });
